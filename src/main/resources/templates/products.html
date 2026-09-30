@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>ProjectFin - Products</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 40px;
+    }
+
+    h1 {
+        margin-bottom: 25px;
+    }
+
+    h2 {
+        margin-top: 30px;
+    }
+
+    form {
+        margin-bottom: 20px;
+    }
+
+    input {
+        padding: 8px;
+        margin-right: 8px;
+    }
+
+    button {
+        padding: 8px 14px;
+        cursor: pointer;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 80%;
+        margin-top: 15px;
+    }
+
+    th, td {
+        border: 1px solid #ccc;
+        padding: 10px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    .delete-button {
+        color: white;
+        background-color: #d9534f;
+        border: none;
+    }
+
+    .edit-button {
+        color: white;
+        background-color: #337ab7;
+        border: none;
+    }
+
+    .update-button {
+        color: white;
+        background-color: #5cb85c;
+        border: none;
+    }
+
+    .cancel-button {
+        background-color: #ddd;
+        border: none;
+    }
+</style>
+
+</head>
+
+<body>
+
+<h1>Product Management</h1>
+
+<!-- ==================== -->
+<!-- ADD PRODUCT -->
+<!-- ==================== -->
+
+<h2>Add Product</h2>
+
+<form th:action="@{/products/add}" method="post">
+
+    <input
+        type="text"
+        name="prod_name"
+        placeholder="Product name"
+        required>
+
+    <input
+        type="number"
+        name="price"
+        placeholder="Price"
+        step="0.01"
+        min="0"
+        required>
+
+    <button type="submit">
+        Add Product
+    </button>
+
+</form>
+
+
+<!-- ==================== -->
+<!-- PRODUCT LIST -->
+<!-- ==================== -->
+
+<h2>Products</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        <tr th:each="product : ${products}">
+
+            <!-- Product ID -->
+            <td th:text="${product.prod_id}"></td>
+
+            <!-- Product Name -->
+            <td th:text="${product.prod_name}"></td>
+
+            <!-- Product Price -->
+            <td th:text="${product.price}"></td>
+
+            <!-- Actions -->
+            <td>
+
+                <!-- EDIT -->
+                <a th:href="@{/products/edit/{id}(id=${product.prod_id})}">
+                    <button type="button" class="edit-button">
+                        Edit
+                    </button>
+                </a>
+
+
+                <!-- DELETE -->
+                <form
+                    th:action="@{/products/delete/{id}(id=${product.prod_id})}"
+                    method="post"
+                    style="display: inline;">
+
+                    <button
+                        type="submit"
+                        class="delete-button">
+
+                        Delete
+
+                    </button>
+
+                </form>
+
+            </td>
+
+        </tr>
+
+    </tbody>
+
+</table>
+
+
+<!-- ==================== -->
+<!-- UPDATE PRODUCT -->
+<!-- ==================== -->
+
+<div th:if="${editProduct != null}">
+
+    <h2>Edit Product</h2>
+
+    <form th:action="@{/products/update}" method="post">
+
+        <!-- ID is required for update -->
+        <input
+            type="hidden"
+            name="prod_id"
+            th:value="${editProduct.prod_id}">
+
+        <label>
+            Product Name:
+        </label>
+
+        <input
+            type="text"
+            name="prod_name"
+            th:value="${editProduct.prod_name}"
+            required>
+
+
+        <label>
+            Price:
+        </label>
+
+        <input
+            type="number"
+            name="price"
+            th:value="${editProduct.price}"
+            step="0.01"
+            min="0"
+            required>
+
+
+        <button
+            type="submit"
+            class="update-button">
+
+            Update Product
+
+        </button>
+
+        <a href="/products">
+            <button
+                type="button"
+                class="cancel-button">
+
+                Cancel
+
+            </button>
+        </a>
+
+    </form>
+
+</div>
+
+</body>
+</html>
