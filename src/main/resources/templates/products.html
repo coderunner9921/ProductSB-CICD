@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>ProjectFin - Products</title>
+    <title>Project - Products</title>
 
 <style>
     body {
@@ -77,13 +77,9 @@
 </head>
 
 <body>
-
 <h1>Product Management</h1>
 
-<!-- ==================== -->
 <!-- ADD PRODUCT -->
-<!-- ==================== -->
-
 <h2>Add Product</h2>
 
 <form th:action="@{/products/add}" method="post">
@@ -109,10 +105,8 @@
 </form>
 
 
-<!-- ==================== -->
-<!-- PRODUCT LIST -->
-<!-- ==================== -->
 
+<!-- PRODUCT LIST -->
 <h2>Products</h2>
 
 <table>
@@ -163,20 +157,13 @@
                     </button>
 
                 </form>
-
             </td>
-
         </tr>
-
     </tbody>
-
 </table>
 
 
-<!-- ==================== -->
 <!-- UPDATE PRODUCT -->
-<!-- ==================== -->
-
 <div th:if="${editProduct != null}">
 
     <h2>Edit Product</h2>

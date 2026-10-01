@@ -19,7 +19,6 @@ public class ProductPageController {
         this.service = service;
     }
 
-
     // READ - Display all products
     @GetMapping("/products")
     public String showProducts(Model model) {
@@ -32,7 +31,6 @@ public class ProductPageController {
         return "products";
     }
 
-
     // CREATE - Add product
     @PostMapping("/products/add")
     public String addProduct(@ModelAttribute Product product) {
@@ -41,7 +39,6 @@ public class ProductPageController {
 
         return "redirect:/products";
     }
-
 
     // READ - Get product for editing
     @GetMapping("/products/edit/{id}")
@@ -56,7 +53,6 @@ public class ProductPageController {
         return "products";
     }
 
-
     // UPDATE - Update product
     @PostMapping("/products/update")
     public String updateProduct(@ModelAttribute Product product) {
@@ -65,7 +61,6 @@ public class ProductPageController {
 
         return "redirect:/products";
     }
-
 
     // DELETE - Delete product
     @PostMapping("/products/delete/{id}")
