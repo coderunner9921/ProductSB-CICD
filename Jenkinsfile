@@ -58,6 +58,14 @@ pipeline {
 	        echo 'Starting ProjectFin with Docker Compose...'
 	        bat 'docker-compose up -d'
 	    }
+	}
+
+	stage('Verify Deployment') {
+    steps {
+        echo 'Verifying Docker deployment...'
+        bat 'docker ps'
+        bat 'docker inspect -f "{{.State.Status}}" projectfin-app | findstr /I "running"'
+    }
 }
 
     }
