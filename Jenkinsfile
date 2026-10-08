@@ -54,15 +54,21 @@ pipeline {
 
         stage('Docker Compose Deploy') {
 
-            steps {
+	    steps {
+	
+	        echo 'Checking Docker Compose...'
+	
+	        bat 'docker compose version'
+	
+	        bat 'docker-compose version'
+	
+	        echo 'Starting ProjectFin with Docker Compose...'
+	
+	        bat 'docker compose up -d'
+	
+	    }
 
-                echo 'Starting ProjectFin with Docker Compose...'
-
-                bat 'docker compose up -d'
-
-            }
-
-        }
+}
 
     }
 
