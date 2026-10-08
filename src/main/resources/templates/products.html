@@ -5,75 +5,61 @@
 <head>
     <meta charset="UTF-8">
     <title>Project - Products</title>
-
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 40px;
-    }
-
-    h1 {
-        margin-bottom: 25px;
-    }
-
-    h2 {
-        margin-top: 30px;
-    }
-
-    form {
-        margin-bottom: 20px;
-    }
-
-    input {
-        padding: 8px;
-        margin-right: 8px;
-    }
-
-    button {
-        padding: 8px 14px;
-        cursor: pointer;
-    }
-
-    table {
-        border-collapse: collapse;
-        width: 80%;
-        margin-top: 15px;
-    }
-
-    th, td {
-        border: 1px solid #ccc;
-        padding: 10px;
-        text-align: left;
-    }
-
-    th {
-        background-color: #f2f2f2;
-    }
-
-    .delete-button {
-        color: white;
-        background-color: #d9534f;
-        border: none;
-    }
-
-    .edit-button {
-        color: white;
-        background-color: #337ab7;
-        border: none;
-    }
-
-    .update-button {
-        color: white;
-        background-color: #5cb85c;
-        border: none;
-    }
-
-    .cancel-button {
-        background-color: #ddd;
-        border: none;
-    }
-</style>
-
+	<style>
+	    body {
+	        font-family: Arial, sans-serif;
+	        margin: 40px;
+	    }
+	    h1 {
+	        margin-bottom: 25px;
+	    }
+	    h2 {
+	        margin-top: 30px;
+	    }
+	    form {
+	        margin-bottom: 20px;
+	    }
+	    input {
+	        padding: 8px;
+	        margin-right: 8px;
+	    }
+	    button {
+	        padding: 8px 14px;
+	        cursor: pointer;
+	    }
+	    table {
+	        border-collapse: collapse;
+	        width: 80%;
+	        margin-top: 15px;
+	    }
+	    th, td {
+	        border: 1px solid #ccc;
+	        padding: 10px;
+	        text-align: left;
+	    }
+	    th {
+	        background-color: #f2f2f2;
+	    }
+	    .delete-button {
+	        color: white;
+	        background-color: #d9534f;
+	        border: none;
+	    }
+	    .edit-button {
+	        color: white;
+	        background-color: #337ab7;
+	        border: none;
+	    }
+	    .update-button {
+	        color: white;
+	        background-color: #5cb85c;
+	        border: none;
+	    }
+	    .cancel-button {
+	        background-color: #ddd;
+	        border: none;
+	    }
+	</style>
 </head>
 
 <body>
@@ -83,7 +69,6 @@
 <h2>Add Product</h2>
 
 <form th:action="@{/products/add}" method="post">
-
     <input
         type="text"
         name="prod_name"
@@ -101,14 +86,12 @@
     <button type="submit">
         Add Product
     </button>
-
 </form>
 
 
 
 <!-- PRODUCT LIST -->
 <h2>Products</h2>
-
 <table>
     <thead>
         <tr>
@@ -141,7 +124,6 @@
                     </button>
                 </a>
 
-
                 <!-- DELETE -->
                 <form
                     th:action="@{/products/delete/{id}(id=${product.prod_id})}"
@@ -151,11 +133,8 @@
                     <button
                         type="submit"
                         class="delete-button">
-
                         Delete
-
                     </button>
-
                 </form>
             </td>
         </tr>
@@ -186,7 +165,6 @@
             th:value="${editProduct.prod_name}"
             required>
 
-
         <label>
             Price:
         </label>
@@ -198,7 +176,6 @@
             step="0.01"
             min="0"
             required>
-
 
         <button
             type="submit"
@@ -219,9 +196,7 @@
         </a>
 
     </form>
-
 </div>
 
 </body>
-
 </html>
