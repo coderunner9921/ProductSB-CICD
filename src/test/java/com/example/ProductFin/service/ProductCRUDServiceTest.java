@@ -1,20 +1,20 @@
 package com.example.ProductFin.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
+import java.util.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+
+import org.mockito.Mockito;
+import com.example.ProductFin.Exception.ResourceNotFoundException;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import com.example.ProductFin.Model.Product;
 import com.example.ProductFin.Repository.ProductRepository;
 import com.example.ProductFin.Service.ProductCRUDService;
@@ -85,21 +85,56 @@ class ProductCRUDServiceTest {
         verify(repo, times(1)).findById(1);
     }
 
-    @Test
-    void updateProduct_shouldSaveProduct() {
+	@Test
+	void updateProduct_shouldSaveProduct() {
+	
+	    Product product = new Product(1, "Updated Laptop", 60000);
+	
+	    when(repo.existsById(1)).thenReturn(true);
+	
+	    service.updateProduct(product);
+	
+	    verify(repo, times(1)).existsById(1);
+	    verify(repo, times(1)).save(product);
+	}
+	
+	@Test
+	void updateProduct_shouldThrowExceptionWhenProductDoesNotExist() {
 
-        Product product = new Product(1, "Updated Laptop", 60000);
+	    Product product = new Product(99, "Unknown Product", 500);
 
-        service.updateProduct(product);
+	    when(repo.existsById(99)).thenReturn(false);
 
-        verify(repo, times(1)).save(product);
-    }
+	    assertThrows(
+	        ResourceNotFoundException.class,
+	        () -> service.updateProduct(product)
+	    );
 
-    @Test
-    void deleteProduct_shouldDeleteProduct() {
+	    verify(repo, times(1)).existsById(99);
+	}
 
-        service.deleteProduct(1);
 
-        verify(repo, times(1)).deleteById(1);
-    }
+	@Test
+	void deleteProduct_shouldDeleteProduct() {
+	
+	    when(repo.existsById(1)).thenReturn(true);
+	
+	    service.deleteProduct(1);
+	
+	    verify(repo, times(1)).existsById(1);
+	    verify(repo, times(1)).deleteById(1);
+	}
+	
+	@Test
+	void deleteProduct_shouldThrowExceptionWhenProductDoesNotExist() {
+
+	    when(repo.existsById(99)).thenReturn(false);
+
+	    assertThrows(
+	        ResourceNotFoundException.class,
+	        () -> service.deleteProduct(99)
+	    );
+
+	    verify(repo, times(1)).existsById(99);
+	}
 }
