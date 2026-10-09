@@ -1,202 +1,324 @@
+
 <!DOCTYPE html>
-
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
-    <title>Project - Products</title>
-	<style>
-	    body {
-	        font-family: Arial, sans-serif;
-	        margin: 40px;
-	    }
-	    h1 {
-	        margin-bottom: 25px;
-	    }
-	    h2 {
-	        margin-top: 30px;
-	    }
-	    form {
-	        margin-bottom: 20px;
-	    }
-	    input {
-	        padding: 8px;
-	        margin-right: 8px;
-	    }
-	    button {
-	        padding: 8px 14px;
-	        cursor: pointer;
-	    }
-	    table {
-	        border-collapse: collapse;
-	        width: 80%;
-	        margin-top: 15px;
-	    }
-	    th, td {
-	        border: 1px solid #ccc;
-	        padding: 10px;
-	        text-align: left;
-	    }
-	    th {
-	        background-color: #f2f2f2;
-	    }
-	    .delete-button {
-	        color: white;
-	        background-color: #d9534f;
-	        border: none;
-	    }
-	    .edit-button {
-	        color: white;
-	        background-color: #337ab7;
-	        border: none;
-	    }
-	    .update-button {
-	        color: white;
-	        background-color: #5cb85c;
-	        border: none;
-	    }
-	    .cancel-button {
-	        background-color: #ddd;
-	        border: none;
-	    }
-	</style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products | ProjectFin</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
-
 <body>
-<h1>Product Management</h1>
+<div class="app-shell">
 
-<!-- ADD PRODUCT -->
-<h2>Add Product</h2>
-
-<form th:action="@{/products/add}" method="post">
-    <input
-        type="text"
-        name="prod_name"
-        placeholder="Product name"
-        required>
-
-    <input
-        type="number"
-        name="price"
-        placeholder="Price"
-        step="0.01"
-        min="0"
-        required>
-
-    <button type="submit">
-        Add Product
-    </button>
-</form>
-
-
-
-<!-- PRODUCT LIST -->
-<h2>Products</h2>
-<table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-
-        <tr th:each="product : ${products}">
-
-            <!-- Product ID -->
-            <td th:text="${product.prod_id}"></td>
-
-            <!-- Product Name -->
-            <td th:text="${product.prod_name}"></td>
-
-            <!-- Product Price -->
-            <td th:text="${product.price}"></td>
-
-            <!-- Actions -->
-            <td>
-
-                <!-- EDIT -->
-                <a th:href="@{/products/edit/{id}(id=${product.prod_id})}">
-                    <button type="button" class="edit-button">
-                        Edit
-                    </button>
-                </a>
-
-                <!-- DELETE -->
-                <form
-                    th:action="@{/products/delete/{id}(id=${product.prod_id})}"
-                    method="post"
-                    style="display: inline;">
-
-                    <button
-                        type="submit"
-                        class="delete-button">
-                        Delete
-                    </button>
-                </form>
-            </td>
-        </tr>
-    </tbody>
-</table>
-
-
-<!-- UPDATE PRODUCT -->
-<div th:if="${editProduct != null}">
-
-    <h2>Edit Product</h2>
-
-    <form th:action="@{/products/update}" method="post">
-
-        <!-- ID is required for update -->
-        <input
-            type="hidden"
-            name="prod_id"
-            th:value="${editProduct.prod_id}">
-
-        <label>
-            Product Name:
-        </label>
-
-        <input
-            type="text"
-            name="prod_name"
-            th:value="${editProduct.prod_name}"
-            required>
-
-        <label>
-            Price:
-        </label>
-
-        <input
-            type="number"
-            name="price"
-            th:value="${editProduct.price}"
-            step="0.01"
-            min="0"
-            required>
-
-        <button
-            type="submit"
-            class="update-button">
-
-            Update Product
-
-        </button>
-
-        <a href="/products">
-            <button
-                type="button"
-                class="cancel-button">
-
-                Cancel
-
-            </button>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <a class="brand" th:href="@{/products}">
+            <span class="brand-mark">P</span>
+            <span>
+                <span class="brand-name">ProjectFin</span>
+                <span class="brand-caption" style="display:block">Inventory workspace</span>
+            </span>
         </a>
 
-    </form>
-</div>
+        <nav>
+            <div class="nav-label">Workspace</div>
+            <a class="nav-link active" th:href="@{/products}">▦ &nbsp; Products</a>
+        </nav>
 
+        <div class="sidebar-note">
+            <strong>Product management</strong>
+            <p>Manage your product catalogue, find items, and keep product details up to date.</p>
+        </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">Workspace / Products</p>
+                <h1>Product dashboard</h1>
+                <p class="subtitle">Manage and organise your product catalogue.</p>
+            </div>
+            <div class="status-pill">
+                <span class="status-dot"></span>
+                Application ready
+            </div>
+        </header>
+
+        <!-- Feedback messages -->
+        <div class="alert alert-success"
+             th:if="${param.success != null}"
+             th:switch="${param.success[0]}">
+            <span th:case="'added'">Product added successfully.</span>
+            <span th:case="'updated'">Product updated successfully.</span>
+            <span th:case="'deleted'">Product deleted successfully.</span>
+            <span th:case="*" >Your action completed successfully.</span>
+        </div>
+
+        <div class="alert alert-error" th:if="${param.error != null}">
+            <span th:text="${param.error[0]}">Something went wrong.</span>
+        </div>
+
+        <!-- Summary cards -->
+        <section class="stats-grid">
+            <article class="stat-card">
+                <div class="stat-label">Total products</div>
+                <p class="stat-value"
+                   th:text="${productPage.totalElements}">0</p>
+                <p class="stat-caption">Products matching your current search</p>
+            </article>
+
+            <article class="stat-card">
+                <div class="stat-label">Shown on this page</div>
+                <p class="stat-value"
+                   th:text="${productPage.numberOfElements}">0</p>
+                <p class="stat-caption">Products displayed in the current view</p>
+            </article>
+
+            <article class="stat-card">
+                <div class="stat-label">Total pages</div>
+                <p class="stat-value"
+                   th:text="${productPage.totalPages}">0</p>
+                <p class="stat-caption"
+                   th:text="'Page ' + (${productPage.totalPages == 0 ? 0 : currentPage + 1}) + ' of ' + ${productPage.totalPages}">
+                    Page 0 of 0
+                </p>
+            </article>
+        </section>
+
+        <!-- Add or edit form -->
+        <section class="panel" id="product-form">
+
+            <div class="panel-header" th:if="${editProduct == null}">
+                <div>
+                    <h2>Add a product</h2>
+                    <p>Enter the details of the product you want to create.</p>
+                </div>
+            </div>
+
+            <div class="panel-header" th:if="${editProduct != null}">
+                <div>
+                    <h2>Edit product</h2>
+                    <p>Update the details and save your changes.</p>
+                </div>
+            </div>
+
+            <div class="panel-body" th:if="${editProduct == null}">
+                <form th:action="@{/products/add}"
+                      th:object="${product}"
+                      method="post">
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="new-name">Product name</label>
+                            <input id="new-name"
+                                   type="text"
+                                   th:field="*{prod_name}"
+                                   placeholder="e.g. Wireless keyboard"
+                                   maxlength="100"
+                                   required>
+                            <span class="form-help">Use a clear, recognisable product name.</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="new-price">Price</label>
+                            <input id="new-price"
+                                   type="number"
+                                   th:field="*{price}"
+                                   placeholder="e.g. 1499.00"
+                                   min="0.01"
+                                   step="0.01"
+                                   required>
+                            <span class="form-help">Enter a value greater than zero.</span>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button class="button-primary" type="submit">+ Add product</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="panel-body" th:if="${editProduct != null}">
+                <form th:action="@{/products/update}"
+                      th:object="${editProduct}"
+                      method="post">
+
+                    <input type="hidden" th:field="*{prod_id}">
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="edit-name">Product name</label>
+                            <input id="edit-name"
+                                   type="text"
+                                   th:field="*{prod_name}"
+                                   maxlength="100"
+                                   required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edit-price">Price</label>
+                            <input id="edit-price"
+                                   type="number"
+                                   th:field="*{price}"
+                                   min="0.01"
+                                   step="0.01"
+                                   required>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button class="button-primary" type="submit">Save changes</button>
+                        <a class="button button-secondary" th:href="@{/products}">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Product list -->
+        <section class="panel">
+            <div class="panel-header">
+                <div>
+                    <h2>Product catalogue</h2>
+                    <p>Search, sort, and browse your saved products.</p>
+                </div>
+            </div>
+
+            <!-- Search and page-size controls -->
+            <div class="search-toolbar">
+                <form class="search-form" th:action="@{/products}" method="get">
+                    <div class="search-input-wrap">
+                        <input type="search"
+                               name="search"
+                               th:value="${search}"
+                               placeholder="Search by product name..."
+                               aria-label="Search products">
+                    </div>
+
+                    <input type="hidden" name="sortBy" th:value="${sortBy}">
+                    <input type="hidden" name="sortDir" th:value="${sortDir}">
+
+                    <select name="size" aria-label="Products per page" style="max-width:120px">
+                        <option value="5" th:selected="${pageSize == 5}">5 per page</option>
+                        <option value="10" th:selected="${pageSize == 10}">10 per page</option>
+                        <option value="20" th:selected="${pageSize == 20}">20 per page</option>
+                    </select>
+
+                    <button class="button-primary" type="submit">Search</button>
+                    <a class="button button-secondary" th:href="@{/products}">Reset</a>
+                </form>
+            </div>
+
+            <!-- Results table -->
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>
+                            <a class="sort-link"
+                               th:href="@{/products(search=${search},page=0,size=${pageSize},sortBy='prod_id',sortDir=${sortBy == 'prod_id' and sortDir == 'asc' ? 'desc' : 'asc'})}">
+                                ID
+                                <span th:if="${sortBy == 'prod_id'}"
+                                      th:text="${sortDir == 'asc' ? '↑' : '↓'}"></span>
+                            </a>
+                        </th>
+                        <th>
+                            <a class="sort-link"
+                               th:href="@{/products(search=${search},page=0,size=${pageSize},sortBy='prod_name',sortDir=${sortBy == 'prod_name' and sortDir == 'asc' ? 'desc' : 'asc'})}">
+                                Product name
+                                <span th:if="${sortBy == 'prod_name'}"
+                                      th:text="${sortDir == 'asc' ? '↑' : '↓'}"></span>
+                            </a>
+                        </th>
+                        <th>
+                            <a class="sort-link"
+                               th:href="@{/products(search=${search},page=0,size=${pageSize},sortBy='price',sortDir=${sortBy == 'price' and sortDir == 'asc' ? 'desc' : 'asc'})}">
+                                Price
+                                <span th:if="${sortBy == 'price'}"
+                                      th:text="${sortDir == 'asc' ? '↑' : '↓'}"></span>
+                            </a>
+                        </th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="p : ${products}">
+                        <td class="product-id" th:text="${p.prod_id}">1</td>
+                        <td class="product-name" th:text="${p.prod_name}">Product name</td>
+                        <td class="price"
+                            th:text="${'₹' + #numbers.formatDecimal(p.price, 1, 2)}">
+                            ₹0.00
+                        </td>
+                        <td>
+                            <div class="row-actions">
+                                <a class="button button-secondary"
+                                   th:href="@{/products/edit/{id}(id=${p.prod_id})}">
+                                    Edit
+                                </a>
+
+                                <form th:action="@{/products/delete/{id}(id=${p.prod_id})}"
+                                      method="post"
+                                      onsubmit="return confirm('Are you sure you want to delete this product?');">
+                                    <button class="button-danger" type="submit">Delete</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr th:if="${#lists.isEmpty(products)}">
+                        <td colspan="4">
+                            <div class="empty-state">
+                                <strong>No products found</strong>
+                                Try another search, or add a new product above.
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <div class="pagination-info">
+                    <span th:if="${productPage.totalElements > 0}">
+                        Showing
+                        <strong th:text="${currentPage * pageSize + 1}">1</strong>
+                        to
+                        <strong th:text="${currentPage * pageSize + productPage.numberOfElements}">10</strong>
+                        of
+                        <strong th:text="${productPage.totalElements}">0</strong>
+                        products
+                    </span>
+                    <span th:if="${productPage.totalElements == 0}">No results to display</span>
+                </div>
+
+                <div class="pagination-actions" th:if="${productPage.totalPages > 1}">
+                    <a class="button button-secondary"
+                       th:classappend="${productPage.first} ? ' disabled' : ''"
+                       th:href="@{/products(search=${search},page=${currentPage - 1},size=${pageSize},sortBy=${sortBy},sortDir=${sortDir})}">
+                        Previous
+                    </a>
+
+                    <span class="page-number current"
+                          th:text="${currentPage + 1}">1</span>
+                    <span class="pagination-info"
+                          th:text="'of ' + ${productPage.totalPages}">of 1</span>
+
+                    <a class="button button-secondary"
+                       th:classappend="${productPage.last} ? ' disabled' : ''"
+                       th:href="@{/products(search=${search},page=${currentPage + 1},size=${pageSize},sortBy=${sortBy},sortDir=${sortDir})}">
+                        Next
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer-note">
+            ProjectFin · Product management workspace
+        </footer>
+    </main>
+</div>
 </body>
 </html>
