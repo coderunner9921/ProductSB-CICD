@@ -7,6 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.ProductFin.Exception.ResourceNotFoundException;
 import com.example.ProductFin.Model.Product;
 import com.example.ProductFin.Repository.ProductRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 public class ProductCRUDService {
@@ -29,6 +31,14 @@ public class ProductCRUDService {
         return repo.findAll();
     }
 
+	public Page<Product> searchProducts(String search, Pageable pageable) {
+	    String keyword = (search == null || search.isBlank())
+	            ? null
+	            : search.trim();
+	
+	    return repo.searchProducts(keyword, pageable);
+	}
+	
     public Optional<Product> getProductById(int id) {
         return repo.findById(id);
     }

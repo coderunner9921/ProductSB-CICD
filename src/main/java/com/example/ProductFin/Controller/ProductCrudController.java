@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.ProductFin.Model.Product;
 import com.example.ProductFin.Service.ProductCRUDService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/products")
@@ -42,7 +43,7 @@ public class ProductCrudController {
 
     // POST /api/products - Create a product
     @PostMapping
-    public ResponseEntity<Product> addProduct(@RequestBody Product product) {
+    public ResponseEntity<Product> addProduct(@Valid @RequestBody Product product) {
         Product savedProduct = service.addProduct(product);
 
         return ResponseEntity
@@ -53,7 +54,7 @@ public class ProductCrudController {
     // POST /api/products/bulk - Create multiple products
     @PostMapping("/bulk")
     public ResponseEntity<List<Product>> addAllProducts(
-            @RequestBody List<Product> products) {
+    		 @Valid @RequestBody List<Product> products) {
 
         List<Product> savedProducts = service.addAllProducts(products);
 
@@ -66,7 +67,7 @@ public class ProductCrudController {
     @PutMapping("/{id}")
     public ResponseEntity<Product> updateProduct(
             @PathVariable int id,
-            @RequestBody Product product) {
+            @Valid @RequestBody Product product) {
 
         product.setProd_id(id);
 

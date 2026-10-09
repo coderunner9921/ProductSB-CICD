@@ -6,6 +6,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "product")
@@ -16,11 +19,14 @@ public class Product {
 	@Column(name = "prod_id")
 	private Integer prod_id;
 	
+	@NotBlank(message = "Product name is required")
+	@Size(max = 100, message = "Product name cannot exceed 100 characters")
 	@Column(name = "prod_name")
-    private String prod_name;
+	private String prod_name;
 
-    @Column(name = "prod_price")
-    private double price;
+	@Positive(message = "Price must be greater than zero")
+	@Column(name = "prod_price")
+	private double price;
     
     public Product(Integer prod_id, String prod_name, double price) {
 		super();
