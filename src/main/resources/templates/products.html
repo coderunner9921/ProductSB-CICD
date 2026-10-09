@@ -35,19 +35,19 @@
     <main class="main-content">
 
         <header class="topbar">
-		    <div class="topbar-actions">
-			    <button type="button"
-			            class="button button-secondary theme-toggle"
-			            id="themeToggle"
-			            aria-label="Switch colour theme">
-			        <span id="themeIcon" aria-hidden="true">☀</span>
-			        <span id="themeLabel">Light mode</span>
-			    </button>
-		
+		<div class="topbar-actions">
 		    <div class="status-pill">
 		        <span class="status-dot"></span>
 		        Application ready
 		    </div>
+		
+		    <button type="button"
+		            class="theme-toggle"
+		            id="themeToggle"
+		            aria-label="Switch to light mode"
+		            title="Switch theme">
+		        <span id="themeIcon" aria-hidden="true">☀</span>
+		    </button>
 		</div>
         </header>
 
@@ -337,11 +337,9 @@
     </main>
 </div>
 
-
 <script>
     (function () {
         const toggle = document.getElementById("themeToggle");
-        const label = document.getElementById("themeLabel");
         const icon = document.getElementById("themeIcon");
         const root = document.documentElement;
 
@@ -350,11 +348,17 @@
 
             const isDark = theme === "dark";
 
-            label.textContent = isDark ? "Light mode" : "Dark mode";
+            // Show the action the user can take next.
             icon.textContent = isDark ? "☀" : "☾";
+            icon.style.color = isDark ? "#fbbf24" : "#6366f1";
 
             toggle.setAttribute(
                 "aria-label",
+                isDark ? "Switch to light mode" : "Switch to dark mode"
+            );
+
+            toggle.setAttribute(
+                "title",
                 isDark ? "Switch to light mode" : "Switch to dark mode"
             );
         }
@@ -368,7 +372,7 @@
                 savedTheme = storedTheme;
             }
         } catch (error) {
-            // The app still works if browser storage is unavailable.
+            // Theme switching still works without browser storage.
         }
 
         applyTheme(savedTheme);
@@ -382,7 +386,7 @@
             try {
                 localStorage.setItem("catalogix-theme", nextTheme);
             } catch (error) {
-                // Theme switching still works until the page is refreshed.
+                // The selection lasts until the page is refreshed.
             }
         });
     })();
