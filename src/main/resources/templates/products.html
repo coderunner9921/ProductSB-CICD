@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Products | ProjectFin</title>
+    <title>Catalogix | Product Management</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
@@ -15,7 +15,7 @@
         <a class="brand" th:href="@{/products}">
             <span class="brand-mark">P</span>
             <span>
-                <span class="brand-name">ProjectFin</span>
+                <span class="brand-name">Catalogix</span>
                 <span class="brand-caption" style="display:block">Inventory workspace</span>
             </span>
         </a>
@@ -35,15 +35,20 @@
     <main class="main-content">
 
         <header class="topbar">
-            <div>
-                <p class="eyebrow">Workspace / Products</p>
-                <h1>Product dashboard</h1>
-                <p class="subtitle">Manage and organise your product catalogue.</p>
-            </div>
-            <div class="status-pill">
-                <span class="status-dot"></span>
-                Application ready
-            </div>
+		    <div class="topbar-actions">
+			    <button type="button"
+			            class="button button-secondary theme-toggle"
+			            id="themeToggle"
+			            aria-label="Switch colour theme">
+			        <span id="themeIcon" aria-hidden="true">☀</span>
+			        <span id="themeLabel">Light mode</span>
+			    </button>
+		
+		    <div class="status-pill">
+		        <span class="status-dot"></span>
+		        Application ready
+		    </div>
+		</div>
         </header>
 
         <!-- Feedback messages -->
@@ -103,7 +108,18 @@
                     <p>Update the details and save your changes.</p>
                 </div>
             </div>
-
+            
+            <div class="panel-body" th:if="${formErrors != null}">
+		    <div class="alert alert-error">
+		        <strong>Please correct the following:</strong>
+		        <ul>
+		            <li th:each="error : ${formErrors}" th:text="${error}">
+		                Validation error
+		            </li>
+		        </ul>
+		    </div>
+		</div>
+		
             <div class="panel-body" th:if="${editProduct == null}">
                 <form th:action="@{/products/add}"
                       th:object="${product}"
@@ -316,9 +332,61 @@
         </section>
 
         <footer class="footer-note">
-            ProjectFin · Product management workspace
+            Catalogix · Product management workspace
         </footer>
     </main>
 </div>
+
+
+<script>
+    (function () {
+        const toggle = document.getElementById("themeToggle");
+        const label = document.getElementById("themeLabel");
+        const icon = document.getElementById("themeIcon");
+        const root = document.documentElement;
+
+        function applyTheme(theme) {
+            root.setAttribute("data-theme", theme);
+
+            const isDark = theme === "dark";
+
+            label.textContent = isDark ? "Light mode" : "Dark mode";
+            icon.textContent = isDark ? "☀" : "☾";
+
+            toggle.setAttribute(
+                "aria-label",
+                isDark ? "Switch to light mode" : "Switch to dark mode"
+            );
+        }
+
+        let savedTheme = "dark";
+
+        try {
+            const storedTheme = localStorage.getItem("catalogix-theme");
+
+            if (storedTheme === "light" || storedTheme === "dark") {
+                savedTheme = storedTheme;
+            }
+        } catch (error) {
+            // The app still works if browser storage is unavailable.
+        }
+
+        applyTheme(savedTheme);
+
+        toggle.addEventListener("click", function () {
+            const currentTheme = root.getAttribute("data-theme");
+            const nextTheme = currentTheme === "dark" ? "light" : "dark";
+
+            applyTheme(nextTheme);
+
+            try {
+                localStorage.setItem("catalogix-theme", nextTheme);
+            } catch (error) {
+                // Theme switching still works until the page is refreshed.
+            }
+        });
+    })();
+</script>
+
 </body>
 </html>

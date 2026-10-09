@@ -15,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.example.ProductFin.Exception.ResourceNotFoundException;
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
 
 @Controller
 public class ProductPageController {
@@ -80,7 +82,22 @@ public class ProductPageController {
 
     // CREATE - Add product
 	@PostMapping("/products/add")
-	public String addProduct(@ModelAttribute Product product) {
+	public String addProduct(
+	        @Valid @ModelAttribute("product") Product product,
+	        BindingResult bindingResult,
+	        Model model) {
+	
+	    if (bindingResult.hasErrors()) {
+	        showProducts("", 0, 10, "prod_id", "asc", model);
+	        model.addAttribute("product", product);
+	        model.addAttribute("formErrors",
+	                bindingResult.getFieldErrors().stream()
+	                        .map(error -> error.getDefaultMessage())
+	                        .distinct()
+	                        .toList());
+	        return "products";
+	    }
+	
 	    service.addProduct(product);
 	    return "redirect:/products?success=added";
 	}
@@ -110,11 +127,26 @@ public class ProductPageController {
 	}
 
     // UPDATE - Update product
-    @PostMapping("/products/update")
-    public String updateProduct(@ModelAttribute Product product) {
-        service.updateProduct(product);
-        return "redirect:/products?success=updated";
-    }
+	@PostMapping("/products/update")
+	public String updateProduct(
+	        @Valid @ModelAttribute("editProduct") Product product,
+	        BindingResult bindingResult,
+	        Model model) {
+	
+	    if (bindingResult.hasErrors()) {
+	        showProducts("", 0, 10, "prod_id", "asc", model);
+	        model.addAttribute("editProduct", product);
+	        model.addAttribute("formErrors",
+	                bindingResult.getFieldErrors().stream()
+	                        .map(error -> error.getDefaultMessage())
+	                        .distinct()
+	                        .toList());
+	        return "products";
+	    }
+	
+	    service.updateProduct(product);
+	    return "redirect:/products?success=updated";
+	}
 
     // DELETE - Delete product
     @PostMapping("/products/delete/{id}")
