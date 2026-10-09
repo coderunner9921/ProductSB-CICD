@@ -104,25 +104,56 @@ public class ProductPageController {
 
     // READ - Get product for editing
 	@GetMapping("/products/edit/{id}")
-	public String editProduct(@PathVariable int id, Model model) {
+	public String editProduct(
+	        @PathVariable int id,
+	        @RequestParam(defaultValue = "") String search,
+	        @RequestParam(defaultValue = "0") int page,
+	        @RequestParam(defaultValue = "10") int size,
+	        @RequestParam(defaultValue = "prod_id") String sortBy,
+	        @RequestParam(defaultValue = "asc") String sortDir,
+	        Model model) {
+
+	    if (size != 5 && size != 10 && size != 20) {
+	        size = 10;
+	    }
+
+	    page = Math.max(0, page);
+
+	    if (!List.of("prod_id", "prod_name", "price").contains(sortBy)) {
+	        sortBy = "prod_id";
+	    }
+
+	    sortDir = "desc".equalsIgnoreCase(sortDir) ? "desc" : "asc";
+
+	    Sort sort = "desc".equals(sortDir)
+	            ? Sort.by(sortBy).descending()
+	            : Sort.by(sortBy).ascending();
+
 	    Product product = service.getProductById(id)
-	            .orElseThrow(() -> new ResourceNotFoundException(
-	                    "Product not found with ID: " + id));
-	
-	    // Populate all the attributes needed by the dashboard.
-	    Page<Product> productPage = service.searchProducts(
-	            "", PageRequest.of(0, 10, Sort.by("prod_id").ascending()));
-	
+	            .orElseThrow(() ->
+	                    new ResourceNotFoundException(
+	                            "Product not found with ID: " + id));
+
+	    Pageable pageable = PageRequest.of(page, size, sort);
+	    Page<Product> productPage = service.searchProducts(search, pageable);
+
+	    if (productPage.getTotalPages() > 0
+	            && page >= productPage.getTotalPages()) {
+	        page = productPage.getTotalPages() - 1;
+	        pageable = PageRequest.of(page, size, sort);
+	        productPage = service.searchProducts(search, pageable);
+	    }
+
 	    model.addAttribute("products", productPage.getContent());
 	    model.addAttribute("product", new Product());
 	    model.addAttribute("editProduct", product);
 	    model.addAttribute("productPage", productPage);
-	    model.addAttribute("currentPage", 0);
-	    model.addAttribute("pageSize", 10);
-	    model.addAttribute("search", "");
-	    model.addAttribute("sortBy", "prod_id");
-	    model.addAttribute("sortDir", "asc");
-	
+	    model.addAttribute("currentPage", page);
+	    model.addAttribute("pageSize", size);
+	    model.addAttribute("search", search);
+	    model.addAttribute("sortBy", sortBy);
+	    model.addAttribute("sortDir", sortDir);
+
 	    return "products";
 	}
 

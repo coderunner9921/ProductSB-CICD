@@ -269,10 +269,8 @@
                         </td>
                         <td>
                             <div class="row-actions">
-                                <a class="button button-secondary"
-                                   th:href="@{/products/edit/{id}(id=${p.prod_id})}">
-                                    Edit
-                                </a>
+                                <a th:href="@{/products/edit/{id}( id=${p.prod_id}, search=${search}, page=${currentPage}, size=${pageSize}, sortBy=${sortBy}, sortDir=${sortDir} )}">
+                                 Edit </a>
 
                                 <form th:action="@{/products/delete/{id}(id=${p.prod_id})}"
                                       method="post"
