@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.RequestParam;
+import com.example.ProductFin.Exception.ResourceNotFoundException;
 
 @Controller
 public class ProductPageController {
@@ -78,42 +79,51 @@ public class ProductPageController {
 	}
 
     // CREATE - Add product
-    @PostMapping("/products/add")
-    public String addProduct(@ModelAttribute Product product) {
-
-        service.addProduct(product);
-
-        return "redirect:/products";
-    }
+	@PostMapping("/products/add")
+	public String addProduct(@ModelAttribute Product product) {
+	    service.addProduct(product);
+	    return "redirect:/products?success=added";
+	}
 
     // READ - Get product for editing
-    @GetMapping("/products/edit/{id}")
-    public String editProduct(@PathVariable int id, Model model) {
-
-        Product product = service.getProductById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
-
-        model.addAttribute("products", service.getAllProducts());
-        model.addAttribute("editProduct", product);
-
-        return "products";
-    }
+	@GetMapping("/products/edit/{id}")
+	public String editProduct(@PathVariable int id, Model model) {
+	    Product product = service.getProductById(id)
+	            .orElseThrow(() -> new ResourceNotFoundException(
+	                    "Product not found with ID: " + id));
+	
+	    // Populate all the attributes needed by the dashboard.
+	    Page<Product> productPage = service.searchProducts(
+	            "", PageRequest.of(0, 10, Sort.by("prod_id").ascending()));
+	
+	    model.addAttribute("products", productPage.getContent());
+	    model.addAttribute("product", new Product());
+	    model.addAttribute("editProduct", product);
+	    model.addAttribute("productPage", productPage);
+	    model.addAttribute("currentPage", 0);
+	    model.addAttribute("pageSize", 10);
+	    model.addAttribute("search", "");
+	    model.addAttribute("sortBy", "prod_id");
+	    model.addAttribute("sortDir", "asc");
+	
+	    return "products";
+	}
 
     // UPDATE - Update product
     @PostMapping("/products/update")
     public String updateProduct(@ModelAttribute Product product) {
-
         service.updateProduct(product);
-
-        return "redirect:/products";
+        return "redirect:/products?success=updated";
     }
 
     // DELETE - Delete product
     @PostMapping("/products/delete/{id}")
     public String deleteProduct(@PathVariable int id) {
-
-        service.deleteProduct(id);
-
-        return "redirect:/products";
-    }
+        try {
+            service.deleteProduct(id);
+            return "redirect:/products?success=deleted";
+        } catch (ResourceNotFoundException ex) {
+            return "redirect:/products?error=Product+not+found";
+        }
+    } 
 }
