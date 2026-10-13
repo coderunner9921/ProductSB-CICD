@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:replace="~{fragments/layout :: head('Products')}"></th:block>
+    <th:block th:replace="~{fragments/layout :: head(title='Products')}"></th:block>
 </head>
 <!-- closeUrl: where "close" returns to: the list with the current search / sort / page.
      Defined on <body> so the dialogs (which sit outside .app) can use it too. -->
