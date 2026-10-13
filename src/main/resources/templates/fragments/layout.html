@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Catalogix layout fragments</title>
+</head>
+<body>
+
+<!--
+    Shared layout pieces. Use from a page with, for example:
+        <th:block th:replace="~{fragments/layout :: head('Products')}"></th:block>
+-->
+
+<!-- ======================= <head> contents ======================= -->
+<th:block th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" content="#14110d">
+    <title th:text="${title} + ' | Catalogix'">Catalogix</title>
+
+    <link rel="icon" href="/img/favicon.ico" sizes="48x48" th:href="@{/img/favicon.ico}">
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png" th:href="@{/img/favicon-32.png}">
+    <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" th:href="@{/img/apple-touch-icon.png}">
+
+    <!-- Must be synchronous: applies the saved theme before the first paint -->
+    <script src="/js/theme-init.js" th:src="@{/js/theme-init.js}"></script>
+    <link rel="stylesheet" href="/css/tokens.css" th:href="@{/css/tokens.css}">
+    <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}">
+</th:block>
+
+
+<!-- ======================= Icon sprite =======================
+     Hand-drawn, stroke-based 24x24 icons. Use with:
+     <svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg>
+     No icon library or external request needed. -->
+<svg th:fragment="icons" class="sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></symbol>
+    <symbol id="i-pencil" viewBox="0 0 24 24"><path d="M4 20h4L19 9a2.1 2.1 0 0 0-3-3L5 17z"/><path d="M14.5 7.5l3 3"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13M10 11v6M14 11v6"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/></symbol>
+    <symbol id="i-box" viewBox="0 0 24 24"><path d="M3.5 7.5L12 3l8.5 4.5v9L12 21l-8.5-4.5z"/><path d="M3.5 7.5L12 12l8.5-4.5M12 12v9"/></symbol>
+    <symbol id="i-sort" viewBox="0 0 24 24"><path d="M8 9l4-4 4 4M8 15l4 4 4-4"/></symbol>
+    <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></symbol>
+    <symbol id="i-arrow-down" viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></symbol>
+    <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+    <symbol id="i-chevron-left" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></symbol>
+    <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+    <symbol id="i-check-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.7 2.7L16 9.5"/></symbol>
+    <symbol id="i-alert-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.4v.1"/></symbol>
+    <symbol id="i-alert-triangle" viewBox="0 0 24 24"><path d="M12 4L2.8 19.5h18.4z"/><path d="M12 10v4.5M12 17.4v.1"/></symbol>
+    <symbol id="i-bars" viewBox="0 0 24 24"><path d="M5 20V11M12 20V4M19 20v-6"/></symbol>
+    <symbol id="i-trend-up" viewBox="0 0 24 24"><path d="M3.5 17l6-6 4 4 7-8M15 7h5.5v5.5"/></symbol>
+    <symbol id="i-trend-down" viewBox="0 0 24 24"><path d="M3.5 7l6 6 4-4 7 8M15 17h5.5v-5.5"/></symbol>
+</svg>
+
+
+<!-- ======================= Sidebar ======================= -->
+<aside th:fragment="sidebar" class="sidebar" id="sidebar" aria-label="Sidebar">
+    <button type="button" class="btn btn-ghost btn-icon btn-sm sidebar-close" data-menu-close aria-label="Close navigation menu">
+        <svg class="icon" aria-hidden="true"><use href="#i-x"/></svg>
+    </button>
+
+    <a class="brand" href="/products" th:href="@{/products}">
+        <img src="/img/catalogix-logo.png" th:src="@{/img/catalogix-logo.png}"
+             alt="Catalogix" width="700" height="616">
+    </a>
+
+    <nav aria-label="Primary">
+        <p class="nav-label">Workspace</p>
+        <a class="nav-link" href="/products" th:href="@{/products}" aria-current="page">
+            <svg class="icon" aria-hidden="true"><use href="#i-box"/></svg>
+            <span>Products</span>
+            <span class="nav-count" th:if="${stats != null}" th:text="${stats.totalProducts}">0</span>
+        </a>
+    </nav>
+</aside>
+
+
+<!-- ======================= Top bar ======================= -->
+<header th:fragment="topbar(pageTitle)" class="topbar">
+    <button type="button" class="btn btn-ghost btn-icon menu-button" data-menu-toggle
+            aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation menu">
+        <svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg>
+    </button>
+
+    <a class="topbar-mark" href="/products" th:href="@{/products}" aria-label="Catalogix">
+        <img src="/img/catalogix-mark.png" th:src="@{/img/catalogix-mark.png}" alt="" width="28" height="28">
+    </a>
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ol>
+            <li>Catalogix</li>
+            <li aria-current="page" th:text="${pageTitle}">Products</li>
+        </ol>
+    </nav>
+
+    <div class="topbar-actions">
+        <button type="button" class="btn btn-ghost btn-icon theme-toggle" data-theme-toggle
+                aria-label="Switch to light mode" title="Switch to light mode">
+            <svg class="icon icon-sun" aria-hidden="true"><use href="#i-sun"/></svg>
+            <svg class="icon icon-moon" aria-hidden="true"><use href="#i-moon"/></svg>
+        </button>
+    </div>
+</header>
+
+
+<!-- ======================= Scripts ======================= -->
+<script th:fragment="scripts" src="/js/app.js" th:src="@{/js/app.js}" defer></script>
+
+</body>
+</html>

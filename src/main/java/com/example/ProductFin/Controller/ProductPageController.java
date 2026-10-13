@@ -76,6 +76,7 @@ public class ProductPageController {
 	    model.addAttribute("search", search);
 	    model.addAttribute("sortBy", sortBy);
 	    model.addAttribute("sortDir", sortDir);
+	    model.addAttribute("stats", service.getProductStats());
 	
 	    return "products";
 	}
@@ -153,6 +154,7 @@ public class ProductPageController {
 	    model.addAttribute("search", search);
 	    model.addAttribute("sortBy", sortBy);
 	    model.addAttribute("sortDir", sortDir);
+	    model.addAttribute("stats", service.getProductStats());
 
 	    return "products";
 	}

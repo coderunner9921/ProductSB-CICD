@@ -1,0 +1,140 @@
+/* ==========================================================================
+   Catalogix design tokens
+   --------------------------------------------------------------------------
+   Dark is the default theme (matches the previous behaviour).
+   The light theme ONLY overrides tokens: no component needs its own
+   light-mode rules. Brand colours are sampled from the Catalogix logo:
+     kraft brown  #886335   tan  #e6c798   cream  #f7f0e6
+   ========================================================================== */
+
+:root {
+    color-scheme: dark;
+
+    /* Brand (fixed, theme independent) */
+    --brand-brown: #886335;
+    --brand-tan: #e6c798;
+    --brand-cream: #f7f0e6;
+
+    /* Surfaces */
+    --bg: #14110d;
+    --sidebar-bg: #100d0a;
+    --surface: #1c1813;
+    --surface-2: #231e17;
+    --field-bg: #120f0b;
+    --overlay: rgb(8 6 4 / 0.66);
+    --logo-plate: var(--brand-cream); /* the wordmark needs a light ground in dark mode */
+
+    /* Lines */
+    --border: #302920;
+    --border-strong: #4a4032;
+    --field-border: #6e604e;
+
+    /* Text */
+    --text: #f3ece1;
+    --text-muted: #ab9d8a;
+    --text-subtle: #8f8270;
+
+    /* Accent */
+    --accent: #d6ac72;
+    --accent-hover: #e3bd86;
+    --accent-active: #c99b5f;
+    --accent-ink: #1c130a;      /* text on --accent */
+    --accent-text: #e0b97f;     /* accent used as text/icon on surfaces */
+    --accent-soft: rgb(214 172 114 / 0.13);
+    --focus: #e0b97f;
+
+    /* Status */
+    --success: #5fc79a;
+    --success-soft: rgb(95 199 154 / 0.12);
+    --success-border: rgb(95 199 154 / 0.38);
+    --danger: #f0817a;
+    --danger-soft: rgb(240 129 122 / 0.12);
+    --danger-border: rgb(240 129 122 / 0.4);
+    --danger-solid: #ef7d76;    /* destructive primary button */
+    --danger-solid-hover: #f59a94;
+    --danger-ink: #2a0b09;
+
+    /* Elevation */
+    --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.35);
+    --shadow-md: 0 10px 28px rgb(0 0 0 / 0.35);
+    --shadow-lg: 0 28px 70px rgb(0 0 0 / 0.55);
+
+    /* Typography (system stack: no external requests, works offline in Docker) */
+    --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+        "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-md: 1rem;
+    --text-lg: 1.25rem;
+    --text-xl: 1.625rem;
+    --text-2xl: 1.875rem;
+
+    /* Spacing scale (4px base) */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.25rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
+    --space-10: 2.5rem;
+    --space-12: 3rem;
+
+    /* Shape */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --radius-pill: 999px;
+
+    /* Layout */
+    --sidebar-w: 248px;
+    --content-max: 1240px;
+    --topbar-h: 64px;
+
+    /* Motion */
+    --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+    --dur-fast: 120ms;
+    --dur: 200ms;
+}
+
+html[data-theme="light"] {
+    color-scheme: light;
+
+    --bg: #f6f1e9;
+    --sidebar-bg: #fbf8f3;
+    --surface: #ffffff;
+    --surface-2: #f9f5ee;
+    --field-bg: #ffffff;
+    --overlay: rgb(36 28 18 / 0.45);
+    --logo-plate: transparent; /* logo is designed for light backgrounds */
+
+    --border: #e6dccb;
+    --border-strong: #d3c6b0;
+    --field-border: #9a8a70;
+
+    --text: #241c12;
+    --text-muted: #665846;
+    --text-subtle: #7a6c58;
+
+    --accent: #7d5530;
+    --accent-hover: #6b4725;
+    --accent-active: #5a3b1d;
+    --accent-ink: #ffffff;
+    --accent-text: #7a5230;
+    --accent-soft: rgb(136 99 53 / 0.1);
+    --focus: #7d5530;
+
+    --success: #1b7352;
+    --success-soft: #e8f5ee;
+    --success-border: #a9d7c0;
+    --danger: #b4232f;
+    --danger-soft: #fdeeee;
+    --danger-border: #efb5b8;
+    --danger-solid: #b4232f;
+    --danger-solid-hover: #9a1c27;
+    --danger-ink: #ffffff;
+
+    --shadow-sm: 0 1px 2px rgb(60 40 15 / 0.08);
+    --shadow-md: 0 10px 28px rgb(60 40 15 / 0.12);
+    --shadow-lg: 0 28px 70px rgb(60 40 15 / 0.22);
+}

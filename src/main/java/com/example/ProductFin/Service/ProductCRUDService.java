@@ -1,4 +1,3 @@
-
 package com.example.ProductFin.Service;
 
 import java.util.*;
@@ -6,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.ProductFin.Exception.ResourceNotFoundException;
 import com.example.ProductFin.Model.Product;
+import com.example.ProductFin.Model.ProductStats;
 import com.example.ProductFin.Repository.ProductRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,6 +39,11 @@ public class ProductCRUDService {
 	    return repo.searchProducts(keyword, pageable);
 	}
 	
+    @Transactional(readOnly = true)
+    public ProductStats getProductStats() {
+        return repo.getProductStats();
+    }
+
     public Optional<Product> getProductById(int id) {
         return repo.findById(id);
     }
