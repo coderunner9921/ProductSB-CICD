@@ -23,9 +23,9 @@
     <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" th:href="@{/img/apple-touch-icon.png}">
 
     <!-- Must be synchronous: applies the saved theme before the first paint -->
-    <script src="/js/theme-init.js" th:src="@{/js/theme-init.js}"></script>
-    <link rel="stylesheet" href="/css/tokens.css" th:href="@{/css/tokens.css}">
-    <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}">
+    <script src="/js/theme-init.js" th:src="@{/js/theme-init.js(v='4a1')}"></script>
+    <link rel="stylesheet" href="/css/tokens.css" th:href="@{/css/tokens.css(v='4a1')}">
+    <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css(v='4a1')}">
 </th:block>
 
 
@@ -34,6 +34,7 @@
      <svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg>
      No icon library or external request needed. -->
 <svg th:fragment="icons" class="sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+    <symbol id="i-panel-left" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="14" rx="2.5"/><path d="M9.5 5v14"/></symbol>
     <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
     <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
     <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
@@ -64,16 +65,18 @@
         <svg class="icon" aria-hidden="true"><use href="#i-x"/></svg>
     </button>
 
-    <a class="brand" href="/products" th:href="@{/products}">
-        <img src="/img/catalogix-logo.png" th:src="@{/img/catalogix-logo.png}"
-             alt="Catalogix" width="700" height="616">
+    <a class="brand" href="/products" th:href="@{/products}" aria-label="Catalogix">
+        <img class="brand-full" src="/img/catalogix-logo.png" th:src="@{/img/catalogix-logo.png}"
+             alt="" width="700" height="616">
+        <img class="brand-mark" src="/img/catalogix-mark.png" th:src="@{/img/catalogix-mark.png}"
+             alt="" width="256" height="254">
     </a>
 
     <nav aria-label="Primary">
         <p class="nav-label">Workspace</p>
-        <a class="nav-link" href="/products" th:href="@{/products}" aria-current="page">
+        <a class="nav-link" href="/products" th:href="@{/products}" aria-current="page" data-label="Products">
             <svg class="icon" aria-hidden="true"><use href="#i-box"/></svg>
-            <span>Products</span>
+            <span class="nav-text">Products</span>
             <span class="nav-count" th:if="${stats != null}" th:text="${stats.totalProducts}">0</span>
         </a>
     </nav>
@@ -82,6 +85,11 @@
 
 <!-- ======================= Top bar ======================= -->
 <header th:fragment="topbar(pageTitle)" class="topbar">
+    <button type="button" class="btn btn-ghost btn-icon sidebar-toggle" data-sidebar-toggle
+            aria-controls="sidebar" aria-expanded="true" aria-label="Collapse sidebar">
+        <svg class="icon" aria-hidden="true"><use href="#i-panel-left"/></svg>
+    </button>
+
     <button type="button" class="btn btn-ghost btn-icon menu-button" data-menu-toggle
             aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation menu">
         <svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg>
@@ -109,7 +117,7 @@
 
 
 <!-- ======================= Scripts ======================= -->
-<script th:fragment="scripts" src="/js/app.js" th:src="@{/js/app.js}" defer></script>
+<script th:fragment="scripts" src="/js/app.js" th:src="@{/js/app.js(v='4a1')}" defer></script>
 
 </body>
 </html>

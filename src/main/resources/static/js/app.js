@@ -60,6 +60,52 @@
     syncThemeUi();
 
     /* ---------------------------------------------------------------------
+     * Collapsible sidebar (desktop). Initial state is set by theme-init.js.
+     * ------------------------------------------------------------------- */
+    var SIDEBAR_KEY = "catalogix-sidebar";
+    var sidebarToggle = $("[data-sidebar-toggle]");
+
+    function isCollapsed() {
+        return root.getAttribute("data-sidebar") === "collapsed";
+    }
+
+    function syncSidebarUi() {
+        var collapsed = isCollapsed();
+        var label = collapsed ? "Expand sidebar" : "Collapse sidebar";
+
+        if (sidebarToggle) {
+            sidebarToggle.setAttribute("aria-expanded", String(!collapsed));
+            sidebarToggle.setAttribute("aria-label", label);
+            sidebarToggle.setAttribute("title", label);
+        }
+
+        // In the icon-only rail, give every link a native tooltip (it is the only visible cue).
+        $$(".sidebar .nav-link[data-label]").forEach(function (link) {
+            if (collapsed) {
+                link.setAttribute("title", link.getAttribute("data-label"));
+            } else {
+                link.removeAttribute("title");
+            }
+        });
+    }
+
+    if (sidebarToggle) {
+        sidebarToggle.addEventListener("click", function () {
+            var next = isCollapsed() ? "expanded" : "collapsed";
+            root.setAttribute("data-sidebar", next);
+
+            try {
+                localStorage.setItem(SIDEBAR_KEY, next);
+            } catch (error) {
+                // The choice lasts until the page is reloaded.
+            }
+            syncSidebarUi();
+        });
+    }
+
+    syncSidebarUi();
+
+    /* ---------------------------------------------------------------------
      * Navigation drawer (tablet / mobile)
      * ------------------------------------------------------------------- */
     var sidebar = $("#sidebar");

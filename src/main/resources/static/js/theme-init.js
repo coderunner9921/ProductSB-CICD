@@ -3,7 +3,9 @@
  * Loaded synchronously in <head> so the saved theme is applied BEFORE the first
  * paint (the old inline script ran at the end of <body> and caused a flash).
  *
- * Behaviour is unchanged from the previous version:
+ * It also restores the sidebar state ("catalogix-sidebar" = collapsed | expanded).
+ *
+ * Theme behaviour is unchanged from the previous version:
  *   - same localStorage key ("catalogix-theme"), values "dark" | "light"
  *   - defaults to dark when nothing valid is stored
  */
@@ -20,6 +22,17 @@
         // Storage can be blocked (private mode); the default theme is used.
     }
 
+    var sidebar = "expanded";
+
+    try {
+        if (localStorage.getItem("catalogix-sidebar") === "collapsed") {
+            sidebar = "collapsed";
+        }
+    } catch (error) {
+        // Default (expanded) is used.
+    }
+
     root.setAttribute("data-theme", theme);
+    root.setAttribute("data-sidebar", sidebar);
     root.classList.add("js"); // lets CSS provide a no-JavaScript fallback
 })();
