@@ -24,7 +24,7 @@ public class ProductCrudController {
     public ProductCrudController(ProductCRUDService service) {
         this.service = service;
     }
-
+    
     // GET /api/products - Get all products
     @GetMapping
     public ResponseEntity<List<Product>> getAllProducts() {
@@ -83,4 +83,5 @@ public class ProductCrudController {
 
         return ResponseEntity.noContent().build();
     }
+    
 }
