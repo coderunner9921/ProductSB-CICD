@@ -20,7 +20,6 @@ import jakarta.validation.Valid;
 public class ProductCrudController {
 
     private final ProductCRUDService service;
-
     public ProductCrudController(ProductCRUDService service) {
         this.service = service;
     }

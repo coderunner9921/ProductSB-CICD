@@ -1,6 +1,4 @@
 package com.example.ProductFin.Model;
-// Catalogue-wide figures shown on the Products page.
-// averagePrice / highestPrice / lowestPrice are null when the catalogue is empty,
  
 public class ProductStats {
 
